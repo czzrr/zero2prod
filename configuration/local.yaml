@@ -2,8 +2,3 @@ application:
   host: 127.0.0.1
 database:
   require_ssl: false
-email_client:
-  # Value retrieved from Postmark's API documentation
-  base_url: "https://api.postmarkapp.com"
-  # Use the single sender email you authorised on Postmark!
-  sender_email: "s194569@student.dtu.dk"
