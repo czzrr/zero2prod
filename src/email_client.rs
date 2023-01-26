@@ -17,10 +17,7 @@ impl EmailClient {
         authorization_token: Secret<String>,
         timeout: std::time::Duration,
     ) -> Self {
-        let http_client = Client::builder()
-            .timeout(timeout)
-            .build()
-            .unwrap();
+        let http_client = Client::builder().timeout(timeout).build().unwrap();
         Self {
             http_client,
             base_url,
@@ -40,7 +37,7 @@ impl EmailClient {
         // `base_url`'s type from `String` to `reqwest::Url`.
         // I'll leave it as an exercise for the reader!
         let url = format!("{}/email", self.base_url);
-        let builder = self.http_client.post(&url);
+        let _builder = self.http_client.post(&url);
         let request_body = SendEmailRequest {
             from: self.sender.as_ref(),
             to: recipient.as_ref(),
@@ -48,7 +45,7 @@ impl EmailClient {
             html_body: html_content.as_ref(),
             text_body: text_content.as_ref(),
         };
-        let builder = self
+        let _builder = self
             .http_client
             .post(&url)
             .header(
@@ -102,7 +99,12 @@ mod tests {
     }
     /// Get a test instance of `EmailClient`.
     fn email_client(base_url: String) -> EmailClient {
-        EmailClient::new(base_url, email(), Secret::new(Faker.fake()), std::time::Duration::from_millis(200))
+        EmailClient::new(
+            base_url,
+            email(),
+            Secret::new(Faker.fake()),
+            std::time::Duration::from_millis(200),
+        )
     }
 
     #[tokio::test]
@@ -179,7 +181,7 @@ mod tests {
         // Arrange
         let mock_server = MockServer::start().await;
         let email_client = email_client(mock_server.uri());
-    
+
         Mock::given(any())
             // Not a 200 anymore!
             .respond_with(ResponseTemplate::new(500))
